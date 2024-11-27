@@ -22,11 +22,14 @@ let ball;
   }
   
   function create() {
-    var ball = game.add.sprite(50, 50, "ball");
+    ball = game.add.sprite(50, 50, "ball");
     
     //Uncomment these after loading and implementing paddle and bricks
     //var paddle = game.add.sprite(75, 10, "paddle");
     //var brick = game.add.sprite(50, 20, "brick");
   }
 
-  function update() {}
+  function update() {
+    ball.x += 1;
+    ball.y += 1;
+  }
