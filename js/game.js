@@ -22,14 +22,16 @@ let ball;
   }
   
   function create() {
+    game.physics.startSystem(Phaser.Physics.ARCADE);
     ball = game.add.sprite(50, 50, "ball");
-    
+    game.physics.enable(ball, Phaser.Physics.ARCADE);
+    ball.body.velocity.set(150, 150);
+    ball.body.collideWorldBounds = true;
+    ball.body.bounce.set(1);
     //Uncomment these after loading and implementing paddle and bricks
     //var paddle = game.add.sprite(75, 10, "paddle");
     //var brick = game.add.sprite(50, 20, "brick");
   }
 
   function update() {
-    ball.x += 1;
-    ball.y += 1;
   }
