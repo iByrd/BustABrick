@@ -57,6 +57,8 @@ let brickInfo;
     paddle.x = game.input.x || game.world.width * 0.5;
   }
 
+
+  //Need help fixing the brick field
   function initBricks() {
     brickInfo = {
       width: 50,
