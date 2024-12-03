@@ -62,8 +62,8 @@ let brickInfo;
       width: 50,
       height: 20,
       count: {
-        row: 3,
-        col: 7
+        row: 7,
+        col: 3
       },
       offset: {
         top: 50,
