@@ -30,13 +30,21 @@ let paddle;
     ball.body.velocity.set(150, -150);
     ball.body.collideWorldBounds = true;
     ball.body.bounce.set(1);
+
+    game.physics.arcade.checkCollision.down = false;
+    ball.checkWorldBounds = true;
+    ball.events.onOutOfBounds.add(() => {
+      alert("Game Over!");
+      location.reload();
+    }, this);
     //Uncomment these after loading and implementing paddle and bricks
     //var paddle = game.add.sprite(75, 10, "paddle");
     paddle = game.add.sprite(game.world.width *0.5, game.world.height - 5, "paddle");
     paddle.anchor.set(0.5, 1);
+    game.physics.enable(paddle, Phaser.Physics.ARCADE);
+    paddle.body.immovable = true;
     //var brick = game.add.sprite(50, 20, "brick");
 
-    game.physics.enable(paddle, Phaser.Physics.ARCADE);
   }
 
   function update() {
