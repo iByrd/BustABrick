@@ -7,6 +7,9 @@ const game = new Phaser.Game(480, 320, Phaser.CANVAS, null, {
 
 let ball;
 let paddle;
+let bricks;
+let newBrick;
+let brickInfo;
 
   function preload() {
     game.stage.smoothed = false;
@@ -17,9 +20,8 @@ let paddle;
   
     game.load.image("ball", "/assets/ball.png")
     game.load.image("paddle", "/assets/paddle.png")
+    game.load.image("brick", "/assets/brick.png")
     
-    //Uncomment when testing paddle and brick
-    //game.load.image("brick", "/assets/brick.png")
   }
   
   function create() {
@@ -43,11 +45,42 @@ let paddle;
     paddle.anchor.set(0.5, 1);
     game.physics.enable(paddle, Phaser.Physics.ARCADE);
     paddle.body.immovable = true;
+
     //var brick = game.add.sprite(50, 20, "brick");
+    initBricks();
 
   }
 
   function update() {
     game.physics.arcade.collide(ball, paddle);
     paddle.x = game.input.x || game.world.width * 0.5;
+  }
+
+  function initBricks() {
+    brickInfo = {
+      width: 50,
+      height: 20,
+      count: {
+        row: 3,
+        col: 7
+      },
+      offset: {
+        top: 50,
+        left: 60
+      },
+      padding: 10,
+    };
+
+    bricks = game.add.group();
+    for(c=0; c<brickInfo.count.col; c++) {
+      for(r=0; r<brickInfo.count.row; r++) {
+          var brickX = (r*(brickInfo.width+brickInfo.padding))+brickInfo.offset.left;
+          var brickY = (c*(brickInfo.height+brickInfo.padding))+brickInfo.offset.top;
+          newBrick = game.add.sprite(brickX, brickY, 'brick');
+          game.physics.enable(newBrick, Phaser.Physics.ARCADE);
+          newBrick.body.immovable = true;
+          newBrick.anchor.set(0.5);
+          bricks.add(newBrick);
+      }
+    }
   }
