@@ -20,9 +20,9 @@ let score = 0;
     game.scale.pageAlignVertically = true;
     game.stage.backgroundColor = "#eee";
   
-    game.load.image("ball", "/assets/ball.png")
-    game.load.image("paddle", "/assets/paddle.png")
-    game.load.image("brick", "/assets/brick.png")
+    game.load.image("ball", "assets/ball.png")
+    game.load.image("paddle", "assets/paddle.png")
+    game.load.image("brick", "assets/brick.png")
     
   }
   
@@ -53,7 +53,7 @@ let score = 0;
 
     //Show score
     scoreText = game.add.text(5, 5, "Points: 0", {
-      font: "18px Arial",
+      font: "18px VCR",
       fill: "#0095DD",
     });
 
