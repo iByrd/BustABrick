@@ -10,6 +10,8 @@ let paddle;
 let bricks;
 let newBrick;
 let brickInfo;
+let scoreText;
+let score = 0;
 
   function preload() {
     game.stage.smoothed = false;
@@ -48,6 +50,12 @@ let brickInfo;
 
     //var brick = game.add.sprite(50, 20, "brick");
     initBricks();
+
+    //Show score
+    scoreText = game.add.text(5, 5, "Points: 0", {
+      font: "18px Arial",
+      fill: "#0095DD",
+    });
 
   }
 
@@ -90,4 +98,6 @@ let brickInfo;
 
   function ballHitBrick(ball, brick) {
     brick.kill();
+    score += 10;
+    scoreText.setText(`Points: ${score}`);
   }
