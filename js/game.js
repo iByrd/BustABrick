@@ -12,6 +12,9 @@ let newBrick;
 let brickInfo;
 let scoreText;
 let score = 0;
+let life = 2;
+let lifeText;
+let lifeLossText;
 
   function preload() {
     game.stage.smoothed = false;
@@ -57,6 +60,21 @@ let score = 0;
       fill: "#0095DD",
     });
 
+    lifeText = game.add.text(game.world.width-5, 5, `life: ${life}`, {
+      font: "18px VCR",
+      fill: "#0095DD",
+    });
+    lifeText.anchor.set(1,0);
+
+    lifeLossText = game.add.text(
+      game.world.width * 0.5,
+      game.world.height * 0.5,
+      "Life lost, click to continue",
+      { font: "18px VCR", fill: "#0095DD" },
+    );
+
+    lifeLossText.anchor.set(0.5);
+    lifeLossText.visible = false;
   }
 
   function update() {
