@@ -100,4 +100,16 @@ let score = 0;
     brick.kill();
     score += 10;
     scoreText.setText(`Points: ${score}`);
+
+    //Check if user wins
+    let countAlive = 0;
+    for (let i = 0; i < bricks.children.length; i++) {
+      if (bricks.children[i].alive) {
+        countAlive++;
+      }
+    }
+    if (countAlive === 0) {
+      alert("You won the game, congratulations!");
+      location.reload();
+    }
   }
