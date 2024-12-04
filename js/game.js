@@ -40,10 +40,7 @@ let lifeLossText;
 
     game.physics.arcade.checkCollision.down = false;
     ball.checkWorldBounds = true;
-    ball.events.onOutOfBounds.add(() => {
-      alert("Game Over!");
-      location.reload();
-    }, this);
+    ball.events.onOutOfBounds.add(ballLeaveScreen, this);
     //Uncomment these after loading and implementing paddle and bricks
     //var paddle = game.add.sprite(75, 10, "paddle");
     paddle = game.add.sprite(game.world.width *0.5, game.world.height - 5, "paddle");
@@ -131,3 +128,21 @@ let lifeLossText;
       location.reload();
     }
   }
+
+  function ballLeaveScreen() {
+    life--;
+    if (life) {
+      lifeText.setText(`Lives: ${life}`);
+      lifeLossText.visible = true;
+      ball.reset(game.world.width * 0.5, game.world.height - 25);
+      paddle.reset(game.world.width * 0.5, game.world.height - 5);
+      game.input.onDown.addOnce(() => {
+        lifeLossText.visible = false;
+        ball.body.velocity.set(150, -150);
+      }, this);
+    } else {
+      alert("You lost, game over!");
+      location.reload();
+    }
+  }
+  
