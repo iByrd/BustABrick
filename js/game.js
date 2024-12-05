@@ -23,15 +23,18 @@ let lifeLossText;
     game.scale.pageAlignVertically = true;
     game.stage.backgroundColor = "#eee";
   
-    game.load.image("ball", "assets/ball.png")
-    game.load.image("paddle", "assets/paddle.png")
-    game.load.image("brick", "assets/brick.png")
+    game.load.image("ball", "assets/ball.png");
+    game.load.image("paddle", "assets/paddle.png");
+    game.load.image("brick", "assets/brick.png");
+    game.load.spritesheet("ball", "assets/ball-Sheet.png", 20, 20)
     
   }
   
   function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     ball = game.add.sprite(game.world.width * 0.5, game.world.height - 25, "ball");
+    ball.animations.add("wobble", [0, 2, 0, 1, 0], 12);
+
     ball.anchor.set(0.5);
     game.physics.enable(ball, Phaser.Physics.ARCADE);
     ball.body.velocity.set(150, -150);
@@ -57,7 +60,7 @@ let lifeLossText;
       fill: "#0095DD",
     });
 
-    lifeText = game.add.text(game.world.width-5, 5, `life: ${life}`, {
+    lifeText = game.add.text(game.world.width-5, 5, `Life: ${life}`, {
       font: "18px VCR",
       fill: "#0095DD",
     });
@@ -75,7 +78,7 @@ let lifeLossText;
   }
 
   function update() {
-    game.physics.arcade.collide(ball, paddle);
+    game.physics.arcade.collide(ball, paddle, ballHitPaddle);
     game.physics.arcade.collide(ball, bricks, ballHitBrick);
     paddle.x = game.input.x || game.world.width * 0.5;
   }
@@ -129,10 +132,14 @@ let lifeLossText;
     }
   }
 
+  function ballHitPaddle(ball, paddle){
+    ball.animations.play("wobble");
+  }
+
   function ballLeaveScreen() {
     life--;
     if (life) {
-      lifeText.setText(`Lives: ${life}`);
+      lifeText.setText(`Life: ${life}`);
       lifeLossText.visible = true;
       ball.reset(game.world.width * 0.5, game.world.height - 25);
       paddle.reset(game.world.width * 0.5, game.world.height - 5);
