@@ -15,6 +15,7 @@ let score = 0;
 let life = 2;
 let lifeText;
 let lifeLossText;
+let velocityMultiplier = 0.0;
 
   function preload() {
     game.stage.smoothed = false;
@@ -94,7 +95,7 @@ let lifeLossText;
       height: 20,
       count: {
         row: 7,
-        col: 3
+        col: 4
       },
       offset: {
         top: 50,
@@ -147,6 +148,9 @@ let lifeLossText;
 
   function ballHitPaddle(ball, paddle){
     ball.animations.play("wobble");
+    velocityMultiplier += 0.005;
+    ball.body.velocity.set((ball.body.velocity.x + (ball.body.velocity.x*velocityMultiplier)),(ball.body.velocity.y + ((ball.body.velocity.y*velocityMultiplier))));
+    //ball.body.getVelocity();
   }
 
   function ballLeaveScreen() {
@@ -156,6 +160,7 @@ let lifeLossText;
       lifeLossText.visible = true;
       ball.reset(game.world.width * 0.5, game.world.height - 25);
       paddle.reset(game.world.width * 0.5, game.world.height - 5);
+      velocityMultiplier = 0.0;
       game.input.onDown.addOnce(() => {
         lifeLossText.visible = false;
         ball.body.velocity.set(150, -150);
