@@ -32,11 +32,18 @@ let velocityMultiplier = 0.0;
     game.load.spritesheet("ball", "assets/ball-Sheet.png", 20, 20);
     game.load.spritesheet("brick", "assets/brickbreak-Sheet.png", 74,34);
     game.load.audio("backgroundMusic", "assets/Loop.wav");
+    game.load.audio("pongHit", "assets/Hit.wav");
+    game.load.audio("break", "assets/Break.wav");
     
   }
   
   function create() {
     game.load.audio("backgroundMusic");
+    game.load.audio("pongHit");
+    game.load.audio("break");
+
+    pongHit = game.add.audio("pongHit");
+    breakSound = game.add.audio("break");
     backgroundMusic = game.add.audio("backgroundMusic");
     backgroundMusic.loop = true;
     backgroundMusic.play();
@@ -128,6 +135,7 @@ let velocityMultiplier = 0.0;
   function ballHitBrick(ball, brick) {
     brick.animations.add("brickbreak", [0,1,2,3,4], 24);
     brick.animations.play("brickbreak");
+    breakSound.play();
     brick.body.enable = false;
     
     score += 10;
@@ -152,6 +160,7 @@ let velocityMultiplier = 0.0;
 
   function ballHitPaddle(ball, paddle){
     ball.animations.play("wobble");
+    pongHit.play();
     velocityMultiplier += 0.005;
     ball.body.velocity.set((ball.body.velocity.x + (ball.body.velocity.x*velocityMultiplier)),(ball.body.velocity.y + ((ball.body.velocity.y*velocityMultiplier))));
     //ball.body.getVelocity();
