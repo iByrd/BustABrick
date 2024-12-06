@@ -5,6 +5,7 @@ const game = new Phaser.Game(480, 320, Phaser.CANVAS, null, {
     update,
   });
 
+let backgroundMusic
 let ball;
 let paddle;
 let bricks;
@@ -29,11 +30,16 @@ let velocityMultiplier = 0.0;
     //game.load.image("brick", "assets/brick.png");
     game.load.image("background", "assets/background.png");
     game.load.spritesheet("ball", "assets/ball-Sheet.png", 20, 20);
-    game.load.spritesheet("brick", "assets/brickbreak-Sheet.png", 74,34)
+    game.load.spritesheet("brick", "assets/brickbreak-Sheet.png", 74,34);
+    game.load.audio("backgroundMusic", "assets/Loop.wav");
     
   }
   
   function create() {
+    game.load.audio("backgroundMusic");
+    backgroundMusic = game.add.audio("backgroundMusic");
+    backgroundMusic.loop = true;
+    backgroundMusic.play();
     game.add.sprite(0,0,"background")
     game.physics.startSystem(Phaser.Physics.ARCADE);
     ball = game.add.sprite(game.world.width * 0.5, game.world.height - 25, "ball");
@@ -123,15 +129,13 @@ let velocityMultiplier = 0.0;
     brick.animations.add("brickbreak", [0,1,2,3,4], 24);
     brick.animations.play("brickbreak");
     brick.body.enable = false;
-    game.time.events.add(Phaser.Timer.SECOND* 0.24, function() {
-      brick.kill();
-    
-      
-    
     
     score += 10;
     scoreText.setText(`Points: ${score}`);
 
+    game.time.events.add(Phaser.Timer.SECOND* 0.24, function() {
+      brick.kill();
+    
     //Check if user wins
     let countAlive = 0;
     for (let i = 0; i < bricks.children.length; i++) {
