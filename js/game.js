@@ -23,17 +23,20 @@ let lifeLossText;
     game.scale.pageAlignVertically = true;
     game.stage.backgroundColor = "#eee";
   
-    game.load.image("ball", "assets/ball.png");
+    //game.load.image("ball", "assets/ball.png");
     game.load.image("paddle", "assets/paddle.png");
-    game.load.image("brick", "assets/brick.png");
-    game.load.spritesheet("ball", "assets/ball-Sheet.png", 20, 20)
+    //game.load.image("brick", "assets/brick.png");
+    game.load.image("background", "assets/background.png");
+    game.load.spritesheet("ball", "assets/ball-Sheet.png", 20, 20);
+    game.load.spritesheet("brick", "assets/brickbreak-Sheet.png", 74,34)
     
   }
   
   function create() {
+    game.add.sprite(0,0,"background")
     game.physics.startSystem(Phaser.Physics.ARCADE);
     ball = game.add.sprite(game.world.width * 0.5, game.world.height - 25, "ball");
-    ball.animations.add("wobble", [0, 2, 0, 1, 0], 12);
+    ball.animations.add("wobble", [ 0, 5, 6,7,8,7,6,0, 1, 2, 3, 4, 3,2 , 1,0], 40);
 
     ball.anchor.set(0.5);
     game.physics.enable(ball, Phaser.Physics.ARCADE);
@@ -109,13 +112,22 @@ let lifeLossText;
           game.physics.enable(newBrick, Phaser.Physics.ARCADE);
           newBrick.body.immovable = true;
           newBrick.anchor.set(0.5);
+          newBrick.body.setSize(50,20,10,7);
           bricks.add(newBrick);
       }
     }
   }
 
   function ballHitBrick(ball, brick) {
-    brick.kill();
+    brick.animations.add("brickbreak", [0,1,2,3,4], 24);
+    brick.animations.play("brickbreak");
+    brick.body.enable = false;
+    game.time.events.add(Phaser.Timer.SECOND* 0.24, function() {
+      brick.kill();
+    
+      
+    
+    
     score += 10;
     scoreText.setText(`Points: ${score}`);
 
@@ -130,6 +142,7 @@ let lifeLossText;
       alert("You won the game, congratulations!");
       location.reload();
     }
+  },this);
   }
 
   function ballHitPaddle(ball, paddle){
