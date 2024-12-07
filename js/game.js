@@ -5,6 +5,9 @@ const game = new Phaser.Game(480, 320, Phaser.CANVAS, null, {
     update,
   });
 
+
+
+
 let backgroundMusic;
 let title;
 let play = false;
@@ -34,6 +37,7 @@ let velocityMultiplier = 0.0;
     //game.load.image("brick", "assets/brick.png");
     game.load.image("background", "assets/background.png");
     game.load.image("Title", "assets/Title.png");
+    game.load.image("backgroundNight", "assets/backgroundNight.png");
     game.load.spritesheet("ball", "assets/ball-Sheet.png", 20, 20);
     game.load.spritesheet("brick", "assets/brickbreak-Sheet.png", 74,34);
     game.load.audio("backgroundMusic", "assets/Loop.wav");
@@ -44,6 +48,7 @@ let velocityMultiplier = 0.0;
   }
   
   function create() {
+    getTimeAndBackground();
     game.load.audio("backgroundMusic");
     game.load.audio("pongHit");
     game.load.audio("break");
@@ -56,7 +61,6 @@ let velocityMultiplier = 0.0;
     breakSound = game.add.audio("break");
     backgroundMusic = game.add.audio("backgroundMusic");
     backgroundMusic.loop = true;
-    game.add.sprite(0,0,"background");
     game.physics.startSystem(Phaser.Physics.ARCADE);
     ball = game.add.sprite(game.world.width * 0.5, game.world.height - 25, "ball");
     ball.animations.add("wobble", [ 0, 5, 6,7,8,7,6,0, 1, 2, 3, 4, 3,2 , 1,0], 40);
@@ -220,4 +224,30 @@ let velocityMultiplier = 0.0;
     play = true;
     ball.body.velocity.set(150, -150);
   }
-  
+
+  function getTimeAndBackground()
+  {
+    const url = 'https://worldtimeapi.org/api/ip';
+    try {
+      let response = fetch(url);
+      let data = response.json();
+      let time = new Date(data.utc_datetime);
+      let hours = time.getUTCHours();
+      console.log("This runs");
+
+      if (hours < 12)
+      {
+        game.add.sprite(0,0,"background");
+      }
+      else if (hours > 12)
+      {  
+        game.add.sprite(0,0,"backgroundNight");
+      }
+    }
+    catch(error)
+    {
+      game.add.sprite(0,0,"background");
+      console.log("Error");
+    }
+    
+  }
