@@ -225,19 +225,19 @@ let background;
 
   async function getTimeAndBackground()
   {
-    const url = 'https://worldtimeapi.org/api/ip';
+    const url = 'http://worldtimeapi.org/api/timezone/EST';
     try {
       const response = await fetch(url);
       const data = await response.json();
       const time = new Date(data.utc_datetime);
       const hours = time.getUTCHours();
       console.log(hours);
-      if (hours < 12)
+      if ((hours - 5) < 18)
       {
         background = game.add.sprite(0,0,"background");
         background.sendToBack();
       }
-      else if (hours > 12)
+      else if ((hours - 5) > 18)
       {  
         background = game.add.sprite(0,0,"backgroundNight");
         background.sendToBack();
