@@ -24,6 +24,7 @@ let lifeText;
 let lifeLossText;
 let startText;
 let velocityMultiplier = 0.0;
+let background;
 
   function preload() {
     game.stage.smoothed = false;
@@ -48,15 +49,13 @@ let velocityMultiplier = 0.0;
   }
   
   function create() {
-    getTimeAndBackground();
     game.load.audio("backgroundMusic");
     game.load.audio("pongHit");
     game.load.audio("break");
-    
+    getTimeAndBackground();
     //title.anchor.set(0.5);
     startBtn = game.add.button(game.world.width, game.world.height,"", Start, this);
     startBtn.anchor.set(0.5);
-    
     pongHit = game.add.audio("pongHit");
     breakSound = game.add.audio("break");
     backgroundMusic = game.add.audio("backgroundMusic");
@@ -132,7 +131,6 @@ let velocityMultiplier = 0.0;
     game.physics.arcade.collide(ball, paddle, ballHitPaddle);
     game.physics.arcade.collide(ball, bricks, ballHitBrick);
     paddle.x = game.input.x || game.world.width * 0.5;
-
   }
 
 
@@ -225,28 +223,30 @@ let velocityMultiplier = 0.0;
     ball.body.velocity.set(150, -150);
   }
 
-  function getTimeAndBackground()
+  async function getTimeAndBackground()
   {
     const url = 'https://worldtimeapi.org/api/ip';
     try {
-      let response = fetch(url);
-      let data = response.json();
-      let time = new Date(data.utc_datetime);
-      let hours = time.getUTCHours();
-      console.log("This runs");
-
+      const response = await fetch(url);
+      const data = await response.json();
+      const time = new Date(data.utc_datetime);
+      const hours = time.getUTCHours();
+      console.log(hours);
       if (hours < 12)
       {
-        game.add.sprite(0,0,"background");
+        background = game.add.sprite(0,0,"background");
+        background.sendToBack();
       }
       else if (hours > 12)
       {  
-        game.add.sprite(0,0,"backgroundNight");
+        background = game.add.sprite(0,0,"backgroundNight");
+        background.sendToBack();
       }
     }
     catch(error)
     {
-      game.add.sprite(0,0,"background");
+      background = game.add.sprite(0,0,"background");
+      background.sendToBack();
       console.log("Error");
     }
     
