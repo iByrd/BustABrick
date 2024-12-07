@@ -5,7 +5,10 @@ const game = new Phaser.Game(480, 320, Phaser.CANVAS, null, {
     update,
   });
 
-let backgroundMusic
+let backgroundMusic;
+let title;
+let play = false;
+let startBtn;
 let ball;
 let paddle;
 let bricks;
@@ -16,6 +19,7 @@ let score = 0;
 let life = 2;
 let lifeText;
 let lifeLossText;
+let startText;
 let velocityMultiplier = 0.0;
 
   function preload() {
@@ -29,11 +33,13 @@ let velocityMultiplier = 0.0;
     game.load.image("paddle", "assets/paddle.png");
     //game.load.image("brick", "assets/brick.png");
     game.load.image("background", "assets/background.png");
+    game.load.image("Title", "assets/Title.png");
     game.load.spritesheet("ball", "assets/ball-Sheet.png", 20, 20);
     game.load.spritesheet("brick", "assets/brickbreak-Sheet.png", 74,34);
     game.load.audio("backgroundMusic", "assets/Loop.wav");
     game.load.audio("pongHit", "assets/Hit.wav");
     game.load.audio("break", "assets/Break.wav");
+    
     
   }
   
@@ -41,17 +47,19 @@ let velocityMultiplier = 0.0;
     game.load.audio("backgroundMusic");
     game.load.audio("pongHit");
     game.load.audio("break");
-
+    
+    //title.anchor.set(0.5);
+    startBtn = game.add.button(game.world.width, game.world.height,"", Start, this);
+    startBtn.anchor.set(0.5);
+    
     pongHit = game.add.audio("pongHit");
     breakSound = game.add.audio("break");
     backgroundMusic = game.add.audio("backgroundMusic");
     backgroundMusic.loop = true;
-    backgroundMusic.play();
-    game.add.sprite(0,0,"background")
+    game.add.sprite(0,0,"background");
     game.physics.startSystem(Phaser.Physics.ARCADE);
     ball = game.add.sprite(game.world.width * 0.5, game.world.height - 25, "ball");
     ball.animations.add("wobble", [ 0, 5, 6,7,8,7,6,0, 1, 2, 3, 4, 3,2 , 1,0], 40);
-
     ball.anchor.set(0.5);
     game.physics.enable(ball, Phaser.Physics.ARCADE);
     ball.body.velocity.set(150, -150);
@@ -90,14 +98,37 @@ let velocityMultiplier = 0.0;
       { font: "18px VCR", fill: "#0095DD" },
     );
 
+    title = game.add.sprite(240,100,"Title");
+    title.anchor.set(0.5);
+    startText = game.add.text(
+      game.world.width * 0.5,
+      game.world.height * 0.5,
+      "Click to start!",
+      { font: "18px VCR", fill: "#0095DD" }
+    )
+
     lifeLossText.anchor.set(0.5);
     lifeLossText.visible = false;
+
+
+
+    ball.reset(game.world.width * 0.5, game.world.height - 25);
+    paddle.reset(game.world.width * 0.5, game.world.height - 5);
+    startText.visible = true;
+    startText.anchor.set(0.5);
+    game.input.onDown.addOnce(() => {
+      ball.body.velocity.set(150, -150);
+      title.destroy();
+      startText.visible = false;
+      backgroundMusic.play();
+    }, this);
   }
 
   function update() {
     game.physics.arcade.collide(ball, paddle, ballHitPaddle);
     game.physics.arcade.collide(ball, bricks, ballHitBrick);
     paddle.x = game.input.x || game.world.width * 0.5;
+
   }
 
 
@@ -162,7 +193,7 @@ let velocityMultiplier = 0.0;
     ball.animations.play("wobble");
     pongHit.play();
     velocityMultiplier += 0.005;
-    ball.body.velocity.set((ball.body.velocity.x + (ball.body.velocity.x*velocityMultiplier)),(ball.body.velocity.y + ((ball.body.velocity.y*velocityMultiplier))));
+    ball.body.velocity.set(((-5 * (paddle.x - ball.x) + (ball.body.velocity.x*velocityMultiplier))),(ball.body.velocity.y + ((ball.body.velocity.y*velocityMultiplier))));
     //ball.body.getVelocity();
   }
 
@@ -182,5 +213,11 @@ let velocityMultiplier = 0.0;
       alert("You lost, game over!");
       location.reload();
     }
+  }
+
+  function Start() {
+    startBtn.destroy();
+    play = true;
+    ball.body.velocity.set(150, -150);
   }
   
