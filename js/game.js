@@ -33,9 +33,7 @@ let background;
     game.scale.pageAlignVertically = true;
     game.stage.backgroundColor = "#eee";
   
-    //game.load.image("ball", "assets/ball.png");
     game.load.image("paddle", "assets/paddle.png");
-    //game.load.image("brick", "assets/brick.png");
     game.load.image("background", "assets/background.png");
     game.load.image("Title", "assets/Title.png");
     game.load.image("backgroundNight", "assets/backgroundNight.png");
@@ -44,8 +42,6 @@ let background;
     game.load.audio("backgroundMusic", "assets/Loop.wav");
     game.load.audio("pongHit", "assets/Hit.wav");
     game.load.audio("break", "assets/Break.wav");
-    
-    
   }
   
   function create() {
@@ -53,13 +49,15 @@ let background;
     game.load.audio("pongHit");
     game.load.audio("break");
     getTimeAndBackground();
-    //title.anchor.set(0.5);
+  
     startBtn = game.add.button(game.world.width, game.world.height,"", Start, this);
     startBtn.anchor.set(0.5);
+
     pongHit = game.add.audio("pongHit");
     breakSound = game.add.audio("break");
     backgroundMusic = game.add.audio("backgroundMusic");
     backgroundMusic.loop = true;
+
     game.physics.startSystem(Phaser.Physics.ARCADE);
     ball = game.add.sprite(game.world.width * 0.5, game.world.height - 25, "ball");
     ball.animations.add("wobble", [ 0, 5, 6,7,8,7,6,0, 1, 2, 3, 4, 3,2 , 1,0], 40);
@@ -68,21 +66,17 @@ let background;
     ball.body.velocity.set(150, -150);
     ball.body.collideWorldBounds = true;
     ball.body.bounce.set(1);
-
     game.physics.arcade.checkCollision.down = false;
     ball.checkWorldBounds = true;
     ball.events.onOutOfBounds.add(ballLeaveScreen, this);
-    //Uncomment these after loading and implementing paddle and bricks
-    //var paddle = game.add.sprite(75, 10, "paddle");
+
     paddle = game.add.sprite(game.world.width *0.5, game.world.height - 5, "paddle");
     paddle.anchor.set(0.5, 1);
     game.physics.enable(paddle, Phaser.Physics.ARCADE);
     paddle.body.immovable = true;
 
-    //var brick = game.add.sprite(50, 20, "brick");
     initBricks();
 
-    //Show score
     scoreText = game.add.text(5, 5, "Points: 0", {
       font: "18px VCR",
       fill: "#0095DD",
@@ -92,6 +86,7 @@ let background;
       font: "18px VCR",
       fill: "#0095DD",
     });
+
     lifeText.anchor.set(1,0);
 
     lifeLossText = game.add.text(
@@ -103,6 +98,7 @@ let background;
 
     title = game.add.sprite(240,100,"Title");
     title.anchor.set(0.5);
+
     startText = game.add.text(
       game.world.width * 0.5,
       game.world.height * 0.5,
@@ -113,12 +109,12 @@ let background;
     lifeLossText.anchor.set(0.5);
     lifeLossText.visible = false;
 
-
-
     ball.reset(game.world.width * 0.5, game.world.height - 25);
     paddle.reset(game.world.width * 0.5, game.world.height - 5);
+
     startText.visible = true;
     startText.anchor.set(0.5);
+
     game.input.onDown.addOnce(() => {
       ball.body.velocity.set(150, -150);
       title.destroy();
@@ -133,8 +129,6 @@ let background;
     paddle.x = game.input.x || game.world.width * 0.5;
   }
 
-
-  //Need help fixing the brick field
   function initBricks() {
     brickInfo = {
       width: 50,
@@ -155,6 +149,7 @@ let background;
       for(r=0; r<brickInfo.count.row; r++) {
           let brickX = (r*(brickInfo.width+brickInfo.padding))+brickInfo.offset.left;
           let brickY = (c*(brickInfo.height+brickInfo.padding))+brickInfo.offset.top;
+
           newBrick = game.add.sprite(brickX, brickY, 'brick');
           game.physics.enable(newBrick, Phaser.Physics.ARCADE);
           newBrick.body.immovable = true;
@@ -177,13 +172,14 @@ let background;
     game.time.events.add(Phaser.Timer.SECOND* 0.24, function() {
       brick.kill();
     
-    //Check if user wins
     let countAlive = 0;
+
     for (let i = 0; i < bricks.children.length; i++) {
       if (bricks.children[i].alive) {
         countAlive++;
       }
     }
+
     if (countAlive === 0) {
       alert("You won the game, congratulations!");
       location.reload();
@@ -196,7 +192,6 @@ let background;
     pongHit.play();
     velocityMultiplier += 0.005;
     ball.body.velocity.set(((-5 * (paddle.x - ball.x) + (ball.body.velocity.x*velocityMultiplier))),(ball.body.velocity.y + ((ball.body.velocity.y*velocityMultiplier))));
-    //ball.body.getVelocity();
   }
 
   function ballLeaveScreen() {
