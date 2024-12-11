@@ -1,6 +1,6 @@
 # BustABrick
 
-Amin Mouti, Corey DeRossett, Zackray Pantchev, Mike Byrd
+Amin Mouti, Corey DeRossett, Zackary Pantchev, Mike Byrd
 
 Bust A Brick is your classic brick breaker game that uses a web api to change the visuals of the game depending on the time.
 
